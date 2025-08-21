@@ -172,6 +172,12 @@ The project follows a clean architecture pattern:
 - `services/`: Application services
 - `utils/`: Shared utilities
 
+The backend follows a clean, layered architecture pattern with clear separation of concerns. At the core is the domain layer (app/domain/) which contains the business logic models and node implementations. The domain models define the data structures for workflows, runs, and run steps, while the nodes represent the building blocks of workflows - including Prompt, LLM, Output, and conditional nodes. Each node implements a specific function that can be chained together to create complex workflow logic.
+
+The application layer (app/core/ and app/services/) orchestrates the workflow execution. The WorkflowEngine in engine.py is the heart of the system, built on top of LangGraph to manage stateful, multi-step conversations. It handles node progression, message passing between nodes, and maintains conversation state. The RunService manages the lifecycle of workflow executions, including starting runs, stepping through nodes, and persisting the conversation history. The WorkflowService handles workflow CRUD operations and validation.
+
+The infrastructure layer (app/infra/) provides external integrations and data persistence. This includes the Supabase client for database operations, repositories for data access (workflows, runs, and run steps), and LLM client abstractions for OpenAI integration. The API layer (app/api/) exposes REST endpoints for workflow management and execution, while the utils provide helper functions like templating. The architecture is designed to be testable, with unit tests for individual components and integration tests for the full workflow execution flow.
+
 ## Testing the Backend
 
 You can test the API in two ways: via the interactive docs or using the provided test script.
